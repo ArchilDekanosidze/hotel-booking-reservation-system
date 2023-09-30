@@ -10,6 +10,7 @@ class SmsProvider implements Provider
 {
     private $user;
     private $text;
+    private $phone_number = 'phone';
     public function __construct(User $user, String $text)
     {
         $this->user = $user;
@@ -19,7 +20,7 @@ class SmsProvider implements Provider
     public function send()
     {
         $this->havePhoneNumber();
-        $mobile = $this->user->phone;
+        $mobile = $this->user->{$this->phone_number};
         $client = new Client();
         $input_data = array("verification-code" => $this->text);
         $url = $this->prepareUrlForSms($this->text, $mobile, $input_data);
@@ -41,7 +42,7 @@ class SmsProvider implements Provider
 
     private function havePhoneNumber()
     {
-        if (is_null($this->user->phone)) {
+        if (is_null($this->user->{$this->phone_number})) {
             throw new UserDoesNotHaveNumber();
         }
     }
