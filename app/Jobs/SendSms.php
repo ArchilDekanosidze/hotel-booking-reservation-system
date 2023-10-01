@@ -15,15 +15,15 @@ class SendSms implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $user;
-    private $text;
+    private $data;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(User $user, String $text)
+    public function __construct(User $user, array $data)
     {
         $this->user = $user;
-        $this->text = $text;
+        $this->data = $data;
     }
 
     /**
@@ -31,6 +31,6 @@ class SendSms implements ShouldQueue
      */
     public function handle(Notification $notification)
     {
-        return $notification->sendSms($this->user, $this->text);
+        return $notification->sendSms($this->user, $this->data);
     }
 }

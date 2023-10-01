@@ -2,6 +2,7 @@
 namespace App\Services\Notification\Providers;
 
 use App\Models\User;
+use App\Services\Notification\Constants\SmsFarazTypes;
 use App\Services\Notification\Exceptions\UserDoesNotHaveNumber;
 use App\Services\Notification\Providers\Contracts\Provider;
 use GuzzleHttp\Client;
@@ -9,12 +10,13 @@ use GuzzleHttp\Client;
 class SmsProvider implements Provider
 {
     private $user;
-    private $text;
+    private $data;
     private $phone_number = 'phone';
-    public function __construct(User $user, String $text)
+
+    public function __construct(User $user, array $data)
     {
         $this->user = $user;
-        $this->text = $text;
+        $this->data = $data;
     }
 
     public function send()
@@ -22,21 +24,26 @@ class SmsProvider implements Provider
         $this->havePhoneNumber();
         $mobile = $this->user->{$this->phone_number};
         $client = new Client();
-        $input_data = array("verification-code" => $this->text);
-        $url = $this->prepareUrlForSms($this->text, $mobile, $input_data);
-        $response = $client->post($url, $input_data);
+        $url = $this->prepareUrlForSms($mobile);
+        $response = $client->post($url);
         return $response->getBody();
     }
 
-    private function prepareUrlForSms(String $text, String $mobile, $input_data)
+    private function prepareUrlForSms(String $mobile)
     {
-        $username = config('services.sms.auth.uname');
-        $password = config('services.sms.auth.pass');
-        $from = config('services.sms.auth.from');
-        $pattern_code = config('services.sms.patterns.verification');
+        $username = config('services.smsFaraz.auth.uname');
+        $password = config('services.smsFaraz.auth.pass');
+        $from = config('services.smsFaraz.auth.from');
+        $pattern_code = $this->data['patern'];
+        $patternRealCode = SmsFarazTypes::toPatern($pattern_code);
+        $classType = SmsFarazTypes::toClass($pattern_code);
+        $inputDataClass = new $classType($this->data);
+        $input_data = $inputDataClass->createInputData();
         $to = array($mobile);
-        $baseUri = config('services.sms.baseUri');
-        $url = $baseUri . $username . "&password=" . urlencode($password) . "&from=$from&to=" . json_encode($to) . "&input_data=" . urlencode(json_encode($input_data)) . "&pattern_code=$pattern_code";
+        $baseUri = config('services.smsFaraz.baseUri');
+        $url = $baseUri . $username . "&password=" . urlencode($password) . "&from=$from&to=" . json_encode($to) . "&input_data=" . urlencode(json_encode($input_data)) . "&pattern_code=$patternRealCode";
+        // dd($url);
+
         return $url;
     }
 
