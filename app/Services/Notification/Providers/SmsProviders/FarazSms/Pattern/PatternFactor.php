@@ -1,7 +1,9 @@
 <?php
-namespace App\Services\Notification\Providers\FarazSms;
+namespace App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern;
 
-class PaternFactor
+use App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern\Contracts\PatternInterface;
+
+class PatternFactor implements PatternInterface
 {
     private $data;
 

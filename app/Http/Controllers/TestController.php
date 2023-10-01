@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendEmail;
 use App\Jobs\SendSms;
+use App\Jobs\SendSmsToMultipleUser;
+use App\Jobs\SendSmsWithNumber;
 use App\Mail\UserRegistered;
 use App\Models\User;
-use App\Services\Notification\Constants\SmsFarazTypes;
+use App\Services\Notification\Providers\SmsProviders\Contracts\SmsTypes;
 
 class TestController extends Controller
 {
@@ -19,18 +21,24 @@ class TestController extends Controller
 
     public function testSms()
     {
-        $user = User::find(1);
-        $data = [
-            'patern' => SmsFarazTypes::FACTOR,
-            'variables' => ['PersonName', 'UnitName', 'OwnerTenant', 'AllDuesAmount', 'ComplexName'],
-        ];
-        SendSms::dispatchSync($user, $data);
-
+        // $main = '122';
+        // $test = is_array($main) ? $main : array($main);
+        // dd($test);
+        // $user = User::find(1);
+        // $multipleUser = User::all();
         // $data = [
-        //     'patern' => SmsFarazTypes::VERIFICATION_CODE,
-        //     'variables' => ['123'],
+        //     'type' => SmsTypes::FACTOR,
+        //     'variables' => ['PersonName', 'UnitName', 'OwnerTenant', 'AllDuesAmount', 'ComplexName'],
         // ];
-        // SendSms::dispatchSync($user, $data);
+
+        $data = [
+            'type' => SmsTypes::VERIFICATION_CODE,
+            'variables' => ['verificationCode' => '222'],
+        ];
+        SendSmsWithNumber::dispatchSync(['09120919921', '09011401689'], $data);return;
+        SendSmsToMultipleUser::dispatchSync($multipleUser, $data);return;
+        SendSms::dispatchSync($user, $data);return;
+
     }
 
 }
