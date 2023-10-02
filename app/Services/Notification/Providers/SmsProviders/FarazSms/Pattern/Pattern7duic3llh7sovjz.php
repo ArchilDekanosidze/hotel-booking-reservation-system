@@ -3,7 +3,7 @@ namespace App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern;
 
 use App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern\Contracts\PatternInterface;
 
-class PatternPanelSharj implements PatternInterface
+class Pattern7duic3llh7sovjz implements PatternInterface
 {
     private $variables;
 
@@ -14,6 +14,6 @@ class PatternPanelSharj implements PatternInterface
 
     public function createInputData()
     {
-        return array("verification-code" => $this->variables[0]);
+        return array("verification-code" => $this->variables['verificationCode']);
     }
 }

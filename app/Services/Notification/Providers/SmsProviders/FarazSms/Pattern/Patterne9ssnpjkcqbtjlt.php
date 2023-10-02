@@ -3,7 +3,7 @@ namespace App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern;
 
 use App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern\Contracts\PatternInterface;
 
-class PatternVerificationCode implements PatternInterface
+class Patterne9ssnpjkcqbtjlt implements PatternInterface
 {
     private $variables;
 

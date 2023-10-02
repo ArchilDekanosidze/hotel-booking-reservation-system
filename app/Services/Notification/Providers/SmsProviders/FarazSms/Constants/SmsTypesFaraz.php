@@ -2,9 +2,6 @@
 namespace App\Services\Notification\Providers\SmsProviders\FarazSms\Constants;
 
 use App\Services\Notification\Providers\SmsProviders\Contracts\SmsTypes;
-use App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern\PatternFactor;
-use App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern\PatternPanelSharj;
-use App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern\PatternVerificationCode;
 
 class SmsTypesFaraz implements SmsTypes
 {
@@ -22,14 +19,26 @@ class SmsTypesFaraz implements SmsTypes
     }
     public static function toClass($type)
     {
-        try {
-            return [
-                self::PANEL_SHARJ => PatternPanelSharj::class,
-                self::FACTOR => PatternFactor::class,
-                self::VERIFICATION_CODE => PatternVerificationCode::class,
-            ][$type];
-        } catch (\Throwable $th) {
+        $fileName = 'Pattern' . self::toPatternCode(self::PANEL_SHARJ);
+        $paternPath = __NAMESPACE__;
+        $pos = strrpos($paternPath, '\\');
+        if (!$pos) {
+            $pos = strrpos($paternPath, '/');
+        }
+        $paternPath = substr($paternPath, 0, $pos + 1);
+        $paternPath = $paternPath . 'Pattern\\' . $fileName;
+        if (!class_exists($paternPath)) {
             throw new \InvalidArgumentException('class does not exist');
         }
+        return $paternPath;
+        // try {
+        //     return [
+        //         self::PANEL_SHARJ => Pattern7duic3llh7sovjz::class,
+        //         self::FACTOR => Patternf6jhyw2aye64nwb::class,
+        //         self::VERIFICATION_CODE => Patterne9ssnpjkcqbtjlt::class,
+        //     ][$type];
+        // } catch (\Throwable $th) {
+        //     throw new \InvalidArgumentException('class does not exist');
+        // }
     }
 }

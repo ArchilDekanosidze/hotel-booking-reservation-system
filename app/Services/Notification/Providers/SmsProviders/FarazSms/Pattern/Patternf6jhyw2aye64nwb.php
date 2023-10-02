@@ -3,7 +3,7 @@ namespace App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern;
 
 use App\Services\Notification\Providers\SmsProviders\FarazSms\Pattern\Contracts\PatternInterface;
 
-class PatternFactor implements PatternInterface
+class Patternf6jhyw2aye64nwb implements PatternInterface
 {
     private $data;
 

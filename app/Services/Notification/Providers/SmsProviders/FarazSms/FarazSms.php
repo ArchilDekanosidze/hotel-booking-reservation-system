@@ -32,6 +32,7 @@ class FarazSms
         $patternCode = SmsTypesFaraz::toPatternCode($smsType);
         $classPath = SmsTypesFaraz::toClass($smsType);
         $smsFarazClass = new $classPath($this->data['variables']);
+        // dd($smsFarazClass);
         $input_data = $smsFarazClass->createInputData();
         $to = $this->mobiles;
         $baseUri = config('services.smsFaraz.baseUri');

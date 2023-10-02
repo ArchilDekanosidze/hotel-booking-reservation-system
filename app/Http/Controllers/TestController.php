@@ -24,7 +24,7 @@ class TestController extends Controller
         // $main = '122';
         // $test = is_array($main) ? $main : array($main);
         // dd($test);
-        // $user = User::find(1);
+        $user = User::find(1);
         // $multipleUser = User::all();
         // $data = [
         //     'type' => SmsTypes::FACTOR,
@@ -35,10 +35,9 @@ class TestController extends Controller
             'type' => SmsTypes::VERIFICATION_CODE,
             'variables' => ['verificationCode' => '222'],
         ];
-        SendSmsWithNumber::dispatchSync(['09120919921', '09011401689'], $data);return;
-        SendSmsToMultipleUser::dispatchSync($multipleUser, $data);return;
         SendSms::dispatchSync($user, $data);return;
 
+        SendSmsWithNumber::dispatchSync(['09120919921', '09011401689'], $data);return;
+        SendSmsToMultipleUser::dispatchSync($multipleUser, $data);return;
     }
-
 }
