@@ -23,8 +23,8 @@ class SmsProvider implements Provider
         $this->havePhoneNumber();
         $mobile = $this->user->{$this->phone_number_column_name};
         $smsProvider = new SmsSender($mobile, $this->data);
-        $smsProvider->send();
-
+        $result = $smsProvider->send();
+        return $result;
     }
 
     private function havePhoneNumber()

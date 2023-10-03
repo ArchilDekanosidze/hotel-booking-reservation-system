@@ -18,8 +18,8 @@ class SmsWithNumberProvider implements Provider
     public function send()
     {
         $smsProvider = new SmsSender($this->phone_numbers, $this->data);
-        $smsProvider->send();
-
+        $result = $smsProvider->send();
+        return $result;
     }
 
 }

@@ -20,6 +20,7 @@ class Notification
         if (!is_subclass_of($providerInstance, Provider::class)) {
             throw new \Exception("Class must Implements Provider");
         }
+        dd($providerInstance->send());
         return $providerInstance->send();
     }
 }

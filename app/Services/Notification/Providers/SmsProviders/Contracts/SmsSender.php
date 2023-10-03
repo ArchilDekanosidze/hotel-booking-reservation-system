@@ -1,9 +1,10 @@
 <?php
 namespace App\Services\Notification\Providers\SmsProviders\Contracts;
 
-use App\Services\Notification\Providers\SmsProviders\FarazSms\FarazSms;
+use App\Services\Notification\Providers\SmsProviders\MeliPayamak\MeliPayamak;
 
-class SmsSender extends FarazSms
+class SmsSender extends MeliPayamak
 {
-
+    const SENT_Failed = 'failed';
+    const SENT_SUCCESS = 'success';
 }

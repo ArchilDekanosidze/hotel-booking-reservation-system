@@ -21,6 +21,9 @@ class TestController extends Controller
 
     public function testSms()
     {
+        // $response = "["962","the username or password is incorrect"]"
+
+        // return;
         // $main = '122';
         // $test = is_array($main) ? $main : array($main);
         // dd($test);
@@ -32,12 +35,20 @@ class TestController extends Controller
         // ];
 
         $data = [
+            'type' => SmsTypes::FACTOR,
+            'variables' => ['name' => 'hamed', 'verificationCode' => '222', 'date' => 'now'],
+        ];
+
+        $data = [
             'type' => SmsTypes::VERIFICATION_CODE,
             'variables' => ['verificationCode' => '222'],
         ];
-        SendSms::dispatchSync($user, $data);return;
 
-        SendSmsWithNumber::dispatchSync(['09120919921', '09011401689'], $data);return;
-        SendSmsToMultipleUser::dispatchSync($multipleUser, $data);return;
+        $result = SendSmsWithNumber::dispatchSync(['09120919921', '09120919921'], $data);return;
+        $result = SendSms::dispatchSync($user, $data);return;
+
+        $result = SendSmsToMultipleUser::dispatchSync($multipleUser, $data);return;
+
     }
+
 }

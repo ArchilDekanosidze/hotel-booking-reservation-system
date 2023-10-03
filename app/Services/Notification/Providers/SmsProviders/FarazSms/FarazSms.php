@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Notification\Providers\SmsProviders\FarazSms;
 
+use App\Services\Notification\Providers\SmsProviders\Contracts\SmsSender;
 use App\Services\Notification\Providers\SmsProviders\FarazSms\Constants\SmsTypesFaraz;
 use GuzzleHttp\Client;
 
@@ -8,22 +9,33 @@ class FarazSms
 {
     private $mobiles;
     private $data;
+    private $input_data;
+    private $result;
 
     public function __construct($mobiles, array $data)
     {
-        $this->mobiles = $mobiles;
+        $this->mobiles = is_array($mobiles) ? $mobiles : array($mobiles);
         $this->data = $data;
+        $this->result = array();
     }
 
     public function send()
     {
         $client = new Client();
-        $url = $this->prepareUrlForSms();
-        $response = $client->post($url);
-        return $response->getBody();
+        foreach ($this->mobiles as $to) {
+            $url = $this->prepareUrlForSms($to);
+            $handler = curl_init($url);
+            curl_setopt($handler, CURLOPT_CUSTOMREQUEST, 'POST');
+            curl_setopt($handler, CURLOPT_POSTFIELDS, $this->input_data);
+            curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($handler);
+            $this->addResponseToResult($response);
+        }
+        $this->SortResult();
+        return $this->result;
     }
 
-    private function prepareUrlForSms()
+    private function prepareUrlForSms($to)
     {
         $username = config('services.smsFaraz.auth.uname');
         $password = config('services.smsFaraz.auth.pass');
@@ -32,12 +44,31 @@ class FarazSms
         $patternCode = SmsTypesFaraz::toPatternCode($smsType);
         $classPath = SmsTypesFaraz::toClass($smsType);
         $smsFarazClass = new $classPath($this->data['variables']);
-        // dd($smsFarazClass);
-        $input_data = $smsFarazClass->createInputData();
-        $to = $this->mobiles;
+        $this->input_data = $smsFarazClass->createInputData();
         $baseUri = config('services.smsFaraz.baseUri');
-        $url = $baseUri . $username . "&password=" . urlencode($password) . "&from=$from&to=" . json_encode($to) . "&input_data=" . urlencode(json_encode($input_data)) . "&pattern_code=$patternCode";
+        $url = $baseUri . $username . "&password=" . urlencode($password) . "&from=$from&to=" . json_encode($to) . "&input_data=" . urlencode(json_encode($this->input_data)) . "&pattern_code=$patternCode";
         return $url;
+    }
+
+    private function addResponseToResult($response)
+    {
+        $response = json_decode($response);
+        if (gettype($response) == 'integer') {
+            $this->result[] = ['status' => SmsSender::SENT_SUCCESS,
+                'code' => $response,
+                'message' => 'Ok'];
+        } else {
+            $this->result[] = ['status' => SmsSender::SENT_Failed,
+                'code' => $response[0],
+                'message' => $response[1]];
+        }
+    }
+
+    private function SortResult()
+    {
+        if (count($this->result) == 1) {
+            $this->result = $this->result[0];
+        }
     }
 
 }

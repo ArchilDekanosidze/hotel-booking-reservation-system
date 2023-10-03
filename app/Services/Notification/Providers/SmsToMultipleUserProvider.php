@@ -23,7 +23,8 @@ class SmsToMultipleUserProvider implements Provider
         foreach ($this->multipleUser as $user) {
             $mobile = $user->{$this->phone_number_column_name};
             $smsProvider = new SmsSender($mobile, $this->data);
-            $smsProvider->send();
+            $result = $smsProvider->send();
+            return $result;
         }
 
     }
