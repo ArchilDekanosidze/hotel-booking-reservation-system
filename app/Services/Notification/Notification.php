@@ -21,6 +21,6 @@ class Notification
             throw new \Exception("Class must Implements Provider");
         }
         dd($providerInstance->send());
-        return $providerInstance->send();
+        // return $providerInstance->send();
     }
 }

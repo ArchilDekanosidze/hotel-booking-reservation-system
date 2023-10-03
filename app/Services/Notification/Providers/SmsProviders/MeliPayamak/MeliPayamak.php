@@ -29,7 +29,7 @@ class MeliPayamak
         foreach ($this->mobiles as $mobile) {
 
             $data = [
-                'username' => config('services.smsMeliPayamak.auth.uname1'),
+                'username' => config('services.smsMeliPayamak.auth.uname'),
                 'password' => config('services.smsMeliPayamak.auth.pass'),
                 'text' => $this->variables,
                 'to' => $mobile,

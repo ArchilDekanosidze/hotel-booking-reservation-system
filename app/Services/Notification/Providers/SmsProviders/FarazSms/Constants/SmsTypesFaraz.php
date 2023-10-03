@@ -9,9 +9,8 @@ class SmsTypesFaraz implements SmsTypes
     {
         try {
             return [
-                self::PANEL_SHARJ => '7duic3llh7sovjz',
-                self::FACTOR => 'f6jhyw2aye64nwb',
-                self::VERIFICATION_CODE => 'e9ssnpjkcqbtjlt',
+                self::VERIFICATION_CODE => 'kbsvo7sksbk0mp1',
+                self::VERIFICATION_CODE_NAME => 'm4hro3odj6x9k2r',
             ][$type];
         } catch (\Throwable $th) {
             throw new \InvalidArgumentException('Patern Type  does not exist');
@@ -19,7 +18,7 @@ class SmsTypesFaraz implements SmsTypes
     }
     public static function toClass($type)
     {
-        $fileName = 'Pattern' . self::toPatternCode(self::PANEL_SHARJ);
+        $fileName = 'Pattern' . self::toPatternCode($type);
         $paternPath = __NAMESPACE__;
         $pos = strrpos($paternPath, '\\');
         if (!$pos) {

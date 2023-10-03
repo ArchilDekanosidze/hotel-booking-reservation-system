@@ -3,7 +3,6 @@ namespace App\Services\Notification\Providers\SmsProviders\FarazSms;
 
 use App\Services\Notification\Providers\SmsProviders\Contracts\SmsSender;
 use App\Services\Notification\Providers\SmsProviders\FarazSms\Constants\SmsTypesFaraz;
-use GuzzleHttp\Client;
 
 class FarazSms
 {
@@ -21,7 +20,6 @@ class FarazSms
 
     public function send()
     {
-        $client = new Client();
         foreach ($this->mobiles as $to) {
             $url = $this->prepareUrlForSms($to);
             $handler = curl_init($url);
@@ -30,6 +28,7 @@ class FarazSms
             curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
             $response = curl_exec($handler);
             $this->addResponseToResult($response);
+            curl_close($handler);
         }
         $this->SortResult();
         return $this->result;

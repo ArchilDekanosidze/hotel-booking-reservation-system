@@ -9,9 +9,8 @@ class SmsTypesMeliPayamak implements SmsTypes
     {
         try {
             return [
-                self::PANEL_SHARJ => '164904',
-                self::FACTOR => '164968',
                 self::VERIFICATION_CODE => '164887',
+                self::VERIFICATION_CODE_NAME => '164904',
             ][$type];
         } catch (\Throwable $th) {
             throw new \InvalidArgumentException('Patern Type  does not exist');
